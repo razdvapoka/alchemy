@@ -1,0 +1,16 @@
+.item
+.itemDragged
+  width: 200px
+  position: absolute
+  user-select: none
+  transition: transform 0.2s ease
+  img
+    pointer-events: none
+    user-select: none
+
+.item
+  cursor: grab
+
+.itemDragged
+  transform: scale(1.1)
+  cursor: grabbing
