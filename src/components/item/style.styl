@@ -1,9 +1,10 @@
 .item
 .itemDragged
-  width: 200px
+  width: 100px
   position: absolute
   user-select: none
   transition: transform 0.2s ease
+  z-index: 100
   img
     pointer-events: none
     user-select: none
@@ -14,3 +15,6 @@
 .itemDragged
   transform: scale(1.1)
   cursor: grabbing
+
+.overTrash
+  filter: invert(100%);
