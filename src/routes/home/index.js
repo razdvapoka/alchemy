@@ -12,6 +12,8 @@ import arrow from "../../assets/images/arrow.png";
 import blueBall from "../../assets/images/blue-ball.png";
 import body from "../../assets/images/body.png";
 import bug from "../../assets/images/bug.png";
+import bug2 from "../../assets/images/bug2.png";
+import bug3 from "../../assets/images/bug3.png";
 import buton from "../../assets/images/button.png";
 import chestnut from "../../assets/images/chestnut.png";
 import eagle from "../../assets/images/eagle.png";
@@ -31,6 +33,14 @@ import rockets from "../../assets/images/rockets.png";
 import snail from "../../assets/images/snail.png";
 import thing from "../../assets/images/thing.png";
 import threader from "../../assets/images/threader.png";
+import dyrbul from "../../assets/images/dyrbul.png";
+import alex from "../../assets/images/alex.png";
+import death from "../../assets/images/death.png";
+import gril from "../../assets/images/gril.png";
+import egg from "../../assets/images/egg.png";
+import device2 from "../../assets/images/device2.png";
+import me from "../../assets/images/me.png";
+import rock from "../../assets/images/rock.png";
 
 function intersectRect(r1, r2) {
   return !(r2.left > r1.right || r2.right < r1.left || r2.top > r1.bottom || r2.bottom < r1.top);
@@ -66,7 +76,17 @@ const ITEMS = [
   { name: "rockets", src: rockets },
   { name: "snail", src: snail },
   { name: "thing", src: thing },
-  { name: "threader", src: threader }
+  { name: "threader", src: threader },
+  { name: "bug2", src: bug2 },
+  { name: "bug3", src: bug3 },
+  { name: "dyrbul", src: dyrbul },
+  { name: "alex", src: alex },
+  { name: "death", src: death },
+  { name: "gril", src: gril },
+  { name: "egg", src: egg },
+  { name: "device2", src: device2 },
+  { name: "me", src: me },
+  { name: "rock", src: rock }
 ];
 
 const TRANSFORMS = {
@@ -107,7 +127,13 @@ class Home extends Component {
     dragCount: 0,
     lastId: 0,
     isMenuOpen: true,
-    isInfoOpen: true
+    isInfoOpen: true,
+    sceneId: "",
+    scenes: {}
+  };
+
+  handleSceneIdInput = e => {
+    this.setState({ sceneId: e.target.value });
   };
 
   toggleInfo = () => {
@@ -127,6 +153,50 @@ class Home extends Component {
       items: {},
       dragCount: 0
     });
+  };
+
+  loadScenes = () => {
+    const scenes = JSON.parse(window.localStorage.getItem("scenes") || "{}");
+    this.setState({ scenes });
+  };
+
+  openScene = sceneId => {
+    const { scenes } = this.state;
+    if (scenes[sceneId]) {
+      this.setState({
+        items: scenes[sceneId],
+        dragCount: scenes[sceneId].length,
+        lastId: scenes[sceneId].length,
+        draggedItem: null
+      });
+    }
+  };
+
+  deleteScene = sceneId => {
+    const { scenes, items } = this.state;
+    const newScenes = Object.keys(scenes).reduce(
+      (ns, s) => (s === sceneId ? ns : { ...ns, [s]: scenes[s] }),
+      {}
+    );
+    if (sceneId.length > 0 && Object.keys(items).length > 0) {
+      window.localStorage.setItem("scenes", JSON.stringify(newScenes));
+      this.loadScenes();
+    }
+  };
+
+  saveScene = () => {
+    const { scenes, sceneId, items } = this.state;
+    if (sceneId.length > 0 && Object.keys(items).length > 0) {
+      window.localStorage.setItem(
+        "scenes",
+        JSON.stringify({
+          ...scenes,
+          [sceneId]: items
+        })
+      );
+      this.setState({ sceneId: "" });
+      this.loadScenes();
+    }
   };
 
   addItem = item => {
@@ -257,8 +327,13 @@ class Home extends Component {
       });
     }
   };
+
+  componentDidMount() {
+    this.loadScenes();
+  }
+
   render() {
-    const { items, draggedItem, isMenuOpen, isInfoOpen } = this.state;
+    const { items, draggedItem, isMenuOpen, isInfoOpen, scenes, sceneId } = this.state;
     return (
       <div className={style.home}>
         <div className={style.homeBox} onMouseMove={this.handleDrag} onMouseUp={this.handleDragEnd}>
@@ -327,6 +402,19 @@ class Home extends Component {
               ❓❓❓
             </button>
           )}
+          <div className={style.scenes}>
+            <input onInput={this.handleSceneIdInput} value={sceneId} />
+            <button className={style.scenesSave} onClick={this.saveScene}>
+              save
+            </button>
+            <div className={style.scenesItems}>
+              {Object.keys(scenes).map(sceneId => (
+                <div className={style.scenesItem} onClick={() => this.openScene(sceneId)}>
+                  {sceneId} <button onClick={() => this.deleteScene(sceneId)}>❌</button>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     );

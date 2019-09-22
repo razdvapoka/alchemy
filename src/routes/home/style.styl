@@ -39,7 +39,7 @@
   position: absolute
   top: 20px
   right: 0
-  max-width: 200px
+  max-width: 300px
   transition: transform 0.3s ease
   &Button
     border: none
@@ -68,3 +68,25 @@
   transform: translateX(100%)
 .menuOpen
   transform: translateX(0)
+
+.scenes
+  position: absolute
+  right: 20px
+  bottom: 20px
+  border: 1px dotted black
+  padding: 20px
+  button
+    border: none
+  &Save
+    margin-left: 10px
+  &Items
+    margin-top: 20px
+  &Item
+    padding-top: 5px
+    display: flex
+    justify-content: space-between
+    cursor: pointer
+  &Item + &Item
+    margin-top: 5px
+    border-top: 1px solid black
+
