@@ -307,6 +307,20 @@ class Home extends Component {
               drag an item over trash bin and release to delete it
               <br />
               click the trash bin to clear the canvas
+              <br />
+              <br />
+              нажимайте на объекты в правом меню
+              <br />
+              объекты можно перетаскивать
+              <br />
+              двойной клик по объекту клонирует его
+              <br />
+              перетащите один объект на другой <br />
+              (возможно, они превратятся во что-то другое)
+              <br />
+              перетащите объект на мусорку, чтобы удалить его
+              <br />
+              нажмите на мусорку, чтобы удалить все объекты
             </div>
           ) : (
             <button className={style.info} onClick={this.toggleInfo}>
