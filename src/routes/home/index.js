@@ -162,11 +162,10 @@ class Home extends Component {
 
   openScene = sceneId => {
     const { scenes } = this.state;
+    // TODO: fix drag count bug
     if (scenes[sceneId]) {
       this.setState({
-        items: scenes[sceneId],
-        dragCount: scenes[sceneId].length,
-        lastId: scenes[sceneId].length,
+        ...scenes[sceneId],
         draggedItem: null
       });
     }
@@ -178,20 +177,22 @@ class Home extends Component {
       (ns, s) => (s === sceneId ? ns : { ...ns, [s]: scenes[s] }),
       {}
     );
-    if (sceneId.length > 0 && Object.keys(items).length > 0) {
-      window.localStorage.setItem("scenes", JSON.stringify(newScenes));
-      this.loadScenes();
-    }
+    window.localStorage.setItem("scenes", JSON.stringify(newScenes));
+    this.loadScenes();
   };
 
   saveScene = () => {
-    const { scenes, sceneId, items } = this.state;
+    const { scenes, sceneId, items, dragCount, lastId } = this.state;
     if (sceneId.length > 0 && Object.keys(items).length > 0) {
       window.localStorage.setItem(
         "scenes",
         JSON.stringify({
           ...scenes,
-          [sceneId]: items
+          [sceneId]: {
+            items,
+            dragCount,
+            lastId
+          }
         })
       );
       this.setState({ sceneId: "" });
